@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forever Bond</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+
+body{
+  background:black;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  overflow:hidden;
+}
+
+.box{
+  width:90%;
+  max-width:420px;
+  background:#000;
+  border-radius:24px;
+  padding:30px 22px;
+  text-align:center;
+  position:relative;
+  z-index:2;
+}
+
+.hidden{display:none}
+
+/* BULBS */
+.corner-bulb{
+  position:absolute;top:16px;width:22px;height:28px;
+  background:#222;border-radius:50% 50% 40% 40%;
+}
+.left{left:18px}.right{right:18px}
+.corner-bulb.on{
+  background:radial-gradient(circle,#fff7b0,#ffb300);
+  box-shadow:0 0 18px 6px rgba(255,180,0,.8);
+}
+
+/* SWITCH */
+.switch{
+  margin:28px auto;width:200px;height:54px;
+  background:#2a2a2a;border-radius:40px;
+  position:relative;cursor:pointer;
+  display:flex;justify-content:space-between;
+  align-items:center;padding:0 22px;
+}
+.switch span{z-index:2;font-weight:bold}
+.slider{
+  position:absolute;top:6px;left:6px;
+  width:88px;height:42px;border-radius:30px;
+  background:#e53935;transition:.4s;
+}
+.switch.on .slider{left:106px;background:#2ecc71}
+
+/* TEXT */
+h2{margin-bottom:12px}
+p{margin-top:14px;line-height:1.8;font-size:18px}
+
+button{
+  margin-top:22px;padding:12px 28px;
+  border:none;border-radius:18px;
+  background:linear-gradient(to right,#ff9800,#ff5722);
+  color:white;font-size:16px;cursor:pointer;
+}
+
+input{
+  width:100%;padding:14px;border-radius:14px;
+  border:none;margin:10px 0;font-size:16px;
+}
+input:disabled{font-weight:bold}
+
+/* FINAL PAGE */
+.final{
+  font-size:22px;
+  line-height:2;
+}
+
+.firefly{
+  position:fixed;
+  width:4px;height:4px;
+  background:#ffd700;
+  border-radius:50%;
+  animation:float 8s linear infinite;
+  opacity:.8;
+}
+
+@keyframes float{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(-120vh)}
+}
+
+audio{display:none}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<div class="corner-bulb left"></div>
+<div class="corner-bulb right"></div>
+
+<!-- PAGE 1 -->
+<div id="page1">
+  <h2>Someone sent you a surprise 💝</h2>
+  <p>Your brother sent something special</p>
+
+  <div class="switch" id="power">
+    <div class="slider"></div>
+    <span>OFF</span><span>ON</span>
+  </div>
+
+  <p id="countdown"></p>
+  <button id="next1" class="hidden" onclick="goCalc()">Next →</button>
+</div>
+
+<!-- PAGE 2 -->
+<div id="page2" class="hidden">
+  <img src="rakhi.png" style="width:160px;margin-bottom:14px">
+  <h2>Rakhi Bond Calculator ❤️</h2>
+
+  <input value="Santosh.g" disabled>
+  <input id="sister" placeholder="Sister's Name">
+
+  <button onclick="reveal()">Reveal Bond</button>
+
+  <div id="result" class="hidden">
+    <p>💖 <b id="sis"></b>, you are my forever friend.</p>
+    <p>🛡️ I will always stand by you.</p>
+    <button onclick="goMsgs()">Next ❤️</button>
+  </div>
+</div>
+
+<!-- PAGE 3 – MESSAGES -->
+<div id="page3" class="hidden">
+  <p id="msgText"></p>
+  <button onclick="nextMsg()">Next 💖</button>
+</div>
+
+<!-- FINAL PAGE -->
+<div id="final" class="hidden final">
+  <p><b>Forever Bond 🤍</b></p><br>
+  <p>
+    A brother and sister may grow older,<br><br>
+    their lives may change,<br><br>
+    but the love between them<br><br>
+    stays forever untouched. 💞
+  </p>
+</div>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+</div>
+
+<script>
+const power=document.getElementById("power");
+const bulbs=document.querySelectorAll(".corner-bulb");
+let sec=5,timer,sisterName="";
+
+power.onclick=()=>{
+  if(power.classList.contains("on")){
+    power.classList.remove("on");
+    bulbs.forEach(b=>b.classList.remove("on"));
+    clearInterval(timer);
+    countdown.innerText="";
+    next1.classList.add("hidden");
+  }else{
+    power.classList.add("on");
+    bulbs.forEach(b=>b.classList.add("on"));
+    start();
+  }
+};
+
+function start(){
+  sec=5;
+  countdown.innerText="Starting in "+sec;
+  timer=setInterval(()=>{
+    sec--;
+    countdown.innerText="Starting in "+sec;
+    if(sec<=0){
+      clearInterval(timer);
+      countdown.innerText="✨ Ready ✨";
+      next1.classList.remove("hidden");
+    }
+  },1000);
+}
+
+function goCalc(){
+  page1.classList.add("hidden");
+  page2.classList.remove("hidden");
+}
+
+function reveal(){
+  const s=sister.value.trim();
+  if(!s){alert("Enter sister name");return;}
+  sisterName=s;
+  sis.innerText=s;
+  result.classList.remove("hidden");
+}
+
+const msgs=[
+  name=>`For my sister "${name}" ❤️<br>You have always been my strength, even when I never said it.`,
+  name=>`For my sister "${name}" ❤️<br>No matter where life takes us, my care for you never changes.`,
+  name=>`For my sister "${name}" ❤️<br>Your presence has given me courage in my hardest times.`,
+  name=>`For my sister "${name}" ❤️<br>You understand me even without words.`,
+  name=>`For my sister "${name}" ❤️<br>Having you as my sister is my biggest blessing.`
+];
+
+let idx=0;
+
+function goMsgs(){
+  page2.classList.add("hidden");
+  page3.classList.remove("hidden");
+  msgText.innerHTML=msgs[0](sisterName);
+  music.play();
+}
+
+function nextMsg(){
+  idx++;
+  if(idx<msgs.length){
+    msgText.innerHTML=msgs[idx](sisterName);
+  }else{
+    page3.classList.add("hidden");
+    final.classList.remove("hidden");
+    fireflies();
+  }
+}
+
+function fireflies(){
+  for(let i=0;i<40;i++){
+    const f=document.createElement("div");
+    f.className="firefly";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top="100vh";
+    f.style.animationDuration=6+Math.random()*6+"s";
+    document.body.appendChild(f);
+  }
+}
+</script>
+
+</body>
+</html>
